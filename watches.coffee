@@ -11,7 +11,7 @@ class BY_TYPE.change_timeout
             @last_change = now
             @last_value = value
         else if (overdue = now - @last_change - @timeout) >= 0
-            report("{@name} is overdue by #{overdue}s")
+            report("#{@name} is overdue by #{overdue}s at #{@last_value}")
 
 class BY_TYPE.match
     constructor: (@name, {@matcher}) ->

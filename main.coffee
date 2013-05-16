@@ -15,7 +15,7 @@ sendMail = (subject, mailTo, body) ->
 
 current_report = []
 report = (msg) ->
-    msg = "#{msg}"
+    msg = "#{new Date().toISOString()} #{msg}"
     console.error(msg)
     current_report.push(msg)
 
