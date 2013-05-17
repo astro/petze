@@ -60,7 +60,7 @@ poll = ->
             done = (err, value) ->
                 pending--
                 if err
-                    report(err.stack || err)
+                    report(err.message || err)
                 else
                     try
                         if watch_config.key
@@ -69,7 +69,7 @@ poll = ->
                                 value = value[key_parts.shift()]
                         named_watches[watch_name].run(report, value)
                     catch e
-                        report(e.stack)
+                        report(e.message)
                 if pending < 1
                     console.log "Poll done"
                     can_flush_reports()
