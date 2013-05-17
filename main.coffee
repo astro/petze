@@ -34,6 +34,9 @@ report = (msg) ->
 last_send = 0
 flush_timeout = null
 can_flush_reports = () ->
+    unless current_report.length > 0
+        return
+
     now = new Date().getTime()
     wait = last_send + (config.min_notification_interval * 1000) - now
     if wait <= 0
