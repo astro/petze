@@ -56,6 +56,8 @@ We recommend running petze under supervision (eg. **runit**).
 
 # Improve it!
 
+* More sources
+* Nice watches
 * Don't be lazy, write a `package.json`, along with a `Cakefile` and
   release with compiled `.js` files!
 * Make error reporting a tad more verbose.
