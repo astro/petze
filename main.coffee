@@ -31,10 +31,15 @@ report = (msg) ->
     console.error(msg)
     current_report.push(msg)
 
+last_send = 0
 can_flush_reports = () ->
-    console.log "sendMail", current_report.length
-    sendMails "[PETZE] Services failure report", current_report.join("\n")
-    current_report = []
+    wait = last_send + (config.min_notification_interval * 1000) - new Date().getTime()
+    if wait <= 0
+        console.log "sendMail", current_report.length
+        sendMails "[PETZE] Services failure report", current_report.join("\n")
+        current_report = []
+    else
+        setTimeout can_flush_reports, wait
 
 
 named_watches = {}
