@@ -4,14 +4,26 @@ child_process = require 'child_process'
 watches = require './watches'
 config = require './config'
 
-sendMail = (subject, mailTo, body) ->
-    mail = child_process.spawn("mail", ["-s", subject, mailTo])
+sendMail = (subject, rcpt, body, cb) ->
+    mail = child_process.spawn("mail", ["-s", subject, rcpt])
     mail.stdin.write(body)
     mail.stdin.end()
     mail.on 'exit', (code) ->
         if code isnt 0
             report("mail exited with #{code}")
             can_flush_reports()
+        cb(code)
+
+# Works serially
+sendMails = (subject, body) ->
+    f = ->
+    # rcpt: Recipient (SMTP: do you speak it?)
+    for rcpt in config.notify
+        do (rcpt) ->
+            g = f
+            f = ->
+                sendMail subject, rcpt, body, g
+    f()
 
 current_report = []
 report = (msg) ->
@@ -21,7 +33,7 @@ report = (msg) ->
 
 can_flush_reports = () ->
     console.log "sendMail", current_report.length
-    # TODO: sendMail
+    sendMails "[PETZE] Services failure report", current_report.join("\n")
     current_report = []
 
 
