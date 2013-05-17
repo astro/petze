@@ -45,7 +45,7 @@ class BY_TYPE.http
 
 
 class BY_TYPE.json
-    constructor: ({@data}) ->
+    constructor: ({ value: @data }) ->
 
     run: (cb) ->
         val = null
@@ -54,7 +54,7 @@ class BY_TYPE.json
             val = JSON.parse(@data)
         catch e
             err = e
-        cb?(val, err)
+        cb?(err, val)
 
 class BY_TYPE.exec
     constructor: ({ @cmd }) ->
