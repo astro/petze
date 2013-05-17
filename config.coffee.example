@@ -1,0 +1,57 @@
+exports.interval = 60
+
+exports.notify = [
+    "team@seriousbizness.com"
+    "astro@spaceboyz.net"
+]
+
+exports.min_notification_interval = 1800
+
+exports.sources =
+    api_stats:
+        type: 'http'
+        url: "http://api.seriousbizness.com/stats.json"
+        timeout: 30
+
+    api_stats_json:
+        type: 'json'
+        source: "api_stats"
+
+    web_v4:
+        type: 'http'
+        url: "http://seriousbizness.com/"
+        timeout: 10
+        host: "127.0.0.1"
+    web_v6:
+        type: 'http'
+        url: "http://seriousbizness.com/"
+        timeout: 10
+        host: "::1"
+
+    ping_ftp:
+        type: 'exec'
+        cmd: "ping -c 3 ftp.seriousbizness.com"
+
+exports.watches =
+    web_v4:
+        type: 'match'
+        source: "web_v4"
+        matcher: (data) ->
+            data.indexOf("<title>") > 0
+    web_v6:
+        type: 'match'
+        source: "web_v6"
+        matcher: (data) ->
+            data.indexOf("<title>") > 0
+
+    ping_ftp:
+            type: 'match'
+            source: 'ping_ftp'
+            matcher: (result) ->
+                result
+
+    api_stats_active_users_timeout:
+        type: 'change_timeout'
+        source: 'api_stats_json'
+        key: 'users.active'
+        interval: 1800
