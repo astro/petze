@@ -60,8 +60,10 @@ class BY_TYPE.exec
     constructor: ({ @cmd }) ->
 
     run: (cb) ->
-        child_process.exec @cmd, (error, stdout, stderr) ->
+        cmd = @cmd
+        child_process.exec cmd, (error, stdout, stderr) ->
             if error
+                error.message = "#{cmd}: #{error.message}"
                 cb error
             else
                 cb null, stdout

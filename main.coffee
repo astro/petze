@@ -63,7 +63,7 @@ poll = ->
             done = (err, value) ->
                 pending--
                 if err
-                    report(err.message || err)
+                    report("#{watch_name}: #{err.message || err}")
                 else
                     try
                         if watch_config.key
